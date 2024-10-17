@@ -32,10 +32,11 @@ class App:
     def importar_imagem(self):
         self.caminho_imagem = filedialog.askopenfilename(
             title="Selecione a imagem",
-            filetypes=[("Imagens", "*.png;*.jpg;*.jpeg")]
+            filetypes=[("Image Files", "*.png *.jpg *.jpeg *.bmp *.tiff *.gif")]
         )
         if self.caminho_imagem:
             messagebox.showinfo("Imagem Selecionada", f"Imagem: {self.caminho_imagem}")
+
     
     def selecionar_pasta(self):
         self.pasta_destino = filedialog.askdirectory(title="Selecione a pasta de destino")

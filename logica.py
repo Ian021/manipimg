@@ -3,8 +3,8 @@ import numpy as np
 from PIL import Image
 
 def particionar_imagem(caminho_imagem, pasta_destino, tamanho_x, tamanho_y):
-    # Carrega a imagem
-    imagem = Image.open(caminho_imagem)
+    # Carrega a imagem com suporte a transparência (RGBA)
+    imagem = Image.open(caminho_imagem).convert('RGBA')
     largura, altura = imagem.size
     
     # Converte para numpy array
@@ -26,7 +26,14 @@ def particionar_imagem(caminho_imagem, pasta_destino, tamanho_x, tamanho_y):
             )
             particao = imagem.crop(area)
             
-            # Salva a partição
-            caminho_particao = os.path.join(pasta_destino, f'particao_{contador}.png')
-            particao.save(caminho_particao)
-            contador += 1
+            # Converte a partição para NumPy array (com suporte a 4 canais: RGBA)
+            matriz_particao = np.array(particao)
+
+            # Verifica o canal alfa (canal 3) para detectar pixels opacos
+            # Se todos os pixels tiverem o valor alfa 0, não salva a partição
+            canal_alfa = matriz_particao[:, :, 3]  # Canal alfa da imagem (4º canal)
+
+            if np.any(canal_alfa > 0):  # Se algum pixel for opaco (alfa > 0), salva
+                caminho_particao = os.path.join(pasta_destino, f'particao_{contador}.png')
+                particao.save(caminho_particao)
+                contador += 1
