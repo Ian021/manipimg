@@ -2,7 +2,7 @@ import os
 import numpy as np
 from PIL import Image
 
-def particionar_imagem(caminho_imagem, pasta_destino, tamanho_x, tamanho_y):
+def particionar_imagem(caminho_imagem, pasta_destino, tamanho_x, tamanho_y, fator_ampliacao=1):
     # Carrega a imagem com suporte a transparência (RGBA)
     imagem = Image.open(caminho_imagem).convert('RGBA')
     largura, altura = imagem.size
@@ -30,10 +30,16 @@ def particionar_imagem(caminho_imagem, pasta_destino, tamanho_x, tamanho_y):
             matriz_particao = np.array(particao)
 
             # Verifica o canal alfa (canal 3) para detectar pixels opacos
-            # Se todos os pixels tiverem o valor alfa 0, não salva a partição
             canal_alfa = matriz_particao[:, :, 3]  # Canal alfa da imagem (4º canal)
 
             if np.any(canal_alfa > 0):  # Se algum pixel for opaco (alfa > 0), salva
+                # Aplica o fator de ampliação utilizando LANCZOS
+                nova_largura = int(particao.width * fator_ampliacao)
+                nova_altura = int(particao.height * fator_ampliacao)
+                
+                particao_redimensionada = particao.resize((nova_largura, nova_altura), Image.LANCZOS)
+                
+                # Salva a partição redimensionada
                 caminho_particao = os.path.join(pasta_destino, f'particao_{contador}.png')
-                particao.save(caminho_particao)
+                particao_redimensionada.save(caminho_particao)
                 contador += 1
