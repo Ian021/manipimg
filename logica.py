@@ -17,6 +17,7 @@ def particionar_imagem(caminho_imagem, pasta_destino, tamanho_x, tamanho_y, fato
     contador = 0
     for i in range(num_particoes_y):
         for j in range(num_particoes_x):
+            contador += 1
             # Define a área da partição
             area = (
                 j * tamanho_x, 
@@ -40,6 +41,5 @@ def particionar_imagem(caminho_imagem, pasta_destino, tamanho_x, tamanho_y, fato
                 particao_redimensionada = particao.resize((nova_largura, nova_altura), Image.LANCZOS)
                 
                 # Salva a partição redimensionada
-                caminho_particao = os.path.join(pasta_destino, f'particao_{contador}.png')
+                caminho_particao = os.path.join(pasta_destino, f'tile_{contador}.png')
                 particao_redimensionada.save(caminho_particao)
-                contador += 1
