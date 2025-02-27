@@ -33,13 +33,13 @@ def particionar_imagem(caminho_imagem, pasta_destino, tamanho_x, tamanho_y, fato
             # Verifica o canal alfa (canal 3) para detectar pixels opacos
             canal_alfa = matriz_particao[:, :, 3]  # Canal alfa da imagem (4º canal)
 
-            if np.any(canal_alfa > 0):  # Se algum pixel for opaco (alfa > 0), salva
-                # Aplica o fator de ampliação utilizando LANCZOS
-                nova_largura = int(particao.width * fator_ampliacao)
-                nova_altura = int(particao.height * fator_ampliacao)
-                
-                particao_redimensionada = particao.resize((nova_largura, nova_altura), Image.LANCZOS)
-                
-                # Salva a partição redimensionada
-                caminho_particao = os.path.join(pasta_destino, f'tile_{contador}.png')
-                particao_redimensionada.save(caminho_particao)
+            # if np.any(canal_alfa > 0):  # Se algum pixel for opaco (alfa > 0), salva
+            # Aplica o fator de ampliação utilizando LANCZOS
+            nova_largura = int(particao.width * fator_ampliacao)
+            nova_altura = int(particao.height * fator_ampliacao)
+            
+            particao_redimensionada = particao.resize((nova_largura, nova_altura), Image.LANCZOS)
+            
+            # Salva a partição redimensionada
+            caminho_particao = os.path.join(pasta_destino, f'tile_{contador}.png')
+            particao_redimensionada.save(caminho_particao)
