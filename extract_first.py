@@ -21,8 +21,12 @@ for image_file in image_files:
     with Image.open(input_image_path) as img:
         # Convert image to RGBA to handle transparency
         img = img.convert('RGBA')
-        # Crop the first 16x16 pixels
-        cropped_img = img.crop((0, 0, 16, 16))
+        if 'dragon' in image_file.lower():
+            # Crop the first 32x32 pixels and resize to 16x16
+            cropped_img = img.crop((0, 0, 32, 32)).resize((16, 16), Image.Resampling.LANCZOS)
+        else:
+            # Crop the first 16x16 pixels
+            cropped_img = img.crop((0, 0, 16, 16))
         cropped_images.append(cropped_img)
 
 # Determine the size of the combined image
